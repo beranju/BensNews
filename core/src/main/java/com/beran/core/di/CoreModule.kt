@@ -2,6 +2,8 @@ package com.beran.core.di
 
 import com.beran.core.BuildConfig
 import com.beran.core.data.remote.retrofit.ApiService
+import com.beran.core.data.repository.NewsRepository
+import com.beran.core.domain.repository.INewsRepository
 import com.beran.core.utils.Constants.API_KEY
 import com.beran.core.utils.Constants.BASE_URL
 import okhttp3.Interceptor
@@ -17,7 +19,7 @@ val networkModule = module {
         val authInterceptor = Interceptor { chain ->
             val request = chain.request()
             val newRequest = request.newBuilder()
-                .addHeader("Authorization", "apiKey ${API_KEY}")
+                .addHeader("Authorization", "apiKey $API_KEY")
                 .build()
             chain.proceed(newRequest)
         }
@@ -39,4 +41,8 @@ val networkModule = module {
             .build()
         retrofit.create(ApiService::class.java)
     }
+}
+
+val repositoryModule = module {
+    single<INewsRepository> { NewsRepository(get()) }
 }

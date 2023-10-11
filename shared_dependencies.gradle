@@ -1,0 +1,11 @@
+dependencies {
+
+    implementation("androidx.core:core-ktx:$core_ktx_version")
+
+    implementation("io.insert-koin:koin-android:$koin_android_version")
+    implementation("io.insert-koin:koin-androidx-compose:$koin_android_version")
+
+    testImplementation("junit:junit:$junit_version")
+    androidTestImplementation("androidx.test.ext:junit:$test_ext_version")
+    androidTestImplementation("androidx.test.espresso:espresso-core:$espresso_core_version")
+}

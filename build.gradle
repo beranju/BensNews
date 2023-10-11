@@ -12,6 +12,8 @@ buildscript {
         retrofit_version = '2.9.0'
         logging_interceptor_version = '5.0.0-alpha.11'
         coroutines_version = '1.7.3'
+        navigation_compose_version = '2.7.4'
+        material_icon_version = '1.5.3'
 
         junit_version = "4.13.2"
         mockito_version = "5.5.0"

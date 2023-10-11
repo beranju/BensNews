@@ -16,7 +16,12 @@ import java.net.SocketTimeoutException
 class NewsRepository(
     private val apiService: ApiService
 ) : INewsRepository {
-    override fun getAllNews(): Flow<Resource<List<NewsModel>>> =
+    override fun getAllNews(
+        page: Int?,
+        pageSize: Int?,
+        country: String?,
+        category: String?
+    ): Flow<Resource<List<NewsModel>>> =
         flow {
             emit(Resource.Loading)
             try {

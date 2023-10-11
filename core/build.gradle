@@ -20,17 +20,27 @@ android {
     }
 
     buildTypes {
+        debug{
+            buildConfigField "String", "NEWS_API_BASE_URL", "\"https://newsapi.org/v2/\""
+            buildConfigField "String", "NEWS_API_KEY", "\"${NEWS_API_KEY}\""
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            buildConfigField "String", "NEWS_API_BASE_URL", "\"https://newsapi.org/v2/\""
+            buildConfigField "String", "NEWS_API_KEY", "\"${NEWS_API_KEY}\""
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
+    }
+    buildFeatures{
+        buildConfig = true
     }
 }
 

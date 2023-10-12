@@ -14,6 +14,7 @@ buildscript {
         coroutines_version = '1.7.3'
         navigation_compose_version = '2.7.4'
         material_icon_version = '1.5.3'
+        coil_compose_version = '2.4.0'
 
         junit_version = "4.13.2"
         mockito_version = "5.5.0"

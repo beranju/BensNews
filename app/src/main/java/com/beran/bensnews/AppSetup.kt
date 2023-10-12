@@ -72,7 +72,9 @@ fun AppSetup(
             }
             composable(Screen.Detail.route) {
                 val data = it.arguments?.getParcelable<NewsModel>("data")
-                DetailScreen(data = data!!)
+                DetailScreen(data = data!!, navigateBack = {
+                    navHostController.navigateUp()
+                })
             }
         }
     }

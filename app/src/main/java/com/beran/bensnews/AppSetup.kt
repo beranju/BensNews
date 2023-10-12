@@ -16,6 +16,7 @@ import com.beran.bensnews.ui.screen.SavedScreen
 import com.beran.bensnews.ui.screen.explore.ExploreScreen
 import com.beran.bensnews.ui.screen.explore.ExploreViewModel
 import com.beran.bensnews.ui.screen.explore.search.SearchScreen
+import com.beran.bensnews.ui.screen.explore.search.SearchViewModel
 import com.beran.bensnews.ui.screen.home.HomeScreen
 import com.beran.bensnews.ui.screen.home.HomeViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -55,7 +56,8 @@ fun AppSetup(
                 SavedScreen()
             }
             composable(Screen.Search.route) {
-                SearchScreen()
+                val viewModel = koinViewModel<SearchViewModel>()
+                SearchScreen(viewModel = viewModel)
             }
 
         }

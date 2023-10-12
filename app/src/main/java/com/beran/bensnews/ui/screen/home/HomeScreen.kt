@@ -58,7 +58,7 @@ fun HomeContent(
     ) {
         HomeAppBar()
         if (error != null) {
-            ErrorView(message = error)
+            ErrorView(message = error, modifier = Modifier.weight(1f))
         } else {
             TopNewsSection(isLoading = isLoading, data = headLineNews)
             ForYouSection(isLoading = isLoading, news = forYouNews)
@@ -98,12 +98,3 @@ fun ForYouSection(
         }
     }
 }
-
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun HomeContentPrev() {
-//    BensNewsTheme {
-//        HomeContent()
-//    }
-//}

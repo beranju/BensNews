@@ -40,10 +40,6 @@ fun ExploreScreen(
         viewModel.setCategory(category)
         viewModel.getNewsByCategory()
     })
-
-    var searchText by remember {
-        mutableStateOf("")
-    }
     ExploreContent(
         navigateToSearch = navigateToSearch,
         news = state.news,

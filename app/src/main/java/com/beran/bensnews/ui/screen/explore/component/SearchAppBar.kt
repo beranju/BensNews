@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -13,7 +14,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,13 +25,15 @@ import com.beran.bensnews.R
 import com.beran.bensnews.ui.theme.BensNewsTheme
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun SearchAppBar(
     searchText: String,
     onChangeSearchText: (String) -> Unit,
+    onSearchQuery: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val keyBoardController = LocalSoftwareKeyboardController.current
     Column(modifier = modifier) {
         OutlinedTextField(
             value = searchText,
@@ -50,6 +55,12 @@ fun SearchAppBar(
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Search
             ),
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    onSearchQuery()
+                    keyBoardController?.hide()
+                }
+            ),
             modifier = Modifier.fillMaxWidth()
         )
     }
@@ -59,6 +70,6 @@ fun SearchAppBar(
 @Composable
 private fun SearchAppBarPrev() {
     BensNewsTheme {
-        ExploreAppBar(searchText = "", onChangeSearchText = {})
+        SearchAppBar(searchText = "", onChangeSearchText = {}, onSearchQuery = {})
     }
 }

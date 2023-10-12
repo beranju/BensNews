@@ -1,5 +1,6 @@
 package com.beran.bensnews.ui.screen.explore.search
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,6 +21,7 @@ import com.beran.core.domain.model.NewsModel
 @Composable
 fun SearchScreen(
     viewModel: SearchViewModel,
+    navigateToDetail: (NewsModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val state = viewModel.state
@@ -31,6 +33,7 @@ fun SearchScreen(
         news = state.news,
         isLoading = state.isLoading,
         error = state.error,
+        navigateToDetail = navigateToDetail,
         modifier = modifier
     )
 }
@@ -43,6 +46,7 @@ fun SearchContent(
     news: List<NewsModel>,
     isLoading: Boolean,
     error: String?,
+    navigateToDetail: (NewsModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -67,7 +71,9 @@ fun SearchContent(
                     }
                 } else {
                     items(news, key = { it.url }) { item ->
-                        NewsItem(newsModel = item)
+                        NewsItem(
+                            newsModel = item,
+                            modifier = Modifier.clickable { navigateToDetail(item) })
                     }
                 }
             }

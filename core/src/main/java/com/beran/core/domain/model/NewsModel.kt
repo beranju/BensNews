@@ -10,13 +10,8 @@ data class NewsModel(
     val author: String? = null,
     val urlToImage: String? = null,
     val description: String? = null,
-    val source: SourceModel? = null,
+    val source: String? = null,
     val title: String? = null,
     val content: String? = null
 ) : Parcelable
 
-@Parcelize
-data class SourceModel(
-    val name: String? = null,
-    val id: String? = null
-) : Parcelable

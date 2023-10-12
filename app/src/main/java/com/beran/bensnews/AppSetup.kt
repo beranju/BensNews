@@ -6,6 +6,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.core.os.bundleOf
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,12 +14,15 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.beran.bensnews.ui.component.BottomBar
 import com.beran.bensnews.ui.navigation.Screen
 import com.beran.bensnews.ui.screen.SavedScreen
+import com.beran.bensnews.ui.screen.detail.DetailScreen
 import com.beran.bensnews.ui.screen.explore.ExploreScreen
 import com.beran.bensnews.ui.screen.explore.ExploreViewModel
 import com.beran.bensnews.ui.screen.explore.search.SearchScreen
 import com.beran.bensnews.ui.screen.explore.search.SearchViewModel
 import com.beran.bensnews.ui.screen.home.HomeScreen
 import com.beran.bensnews.ui.screen.home.HomeViewModel
+import com.beran.bensnews.utils.ExtensionFun.navigate
+import com.beran.core.domain.model.NewsModel
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,24 +48,32 @@ fun AppSetup(
         ) {
             composable(Screen.Home.route) {
                 val viewModel = koinViewModel<HomeViewModel>()
-                HomeScreen(viewModel = viewModel)
+                HomeScreen(viewModel = viewModel, navigateToDetail = { news ->
+                    navHostController.navigate(Screen.Detail.route, bundleOf("data" to news))
+                })
             }
             composable(Screen.Explore.route) {
                 val viewModel = koinViewModel<ExploreViewModel>()
                 ExploreScreen(viewModel = viewModel, navigateToSearch = {
                     navHostController.navigate(Screen.Search.route)
-                })
+                },
+                    navigateToDetail = { news ->
+                        navHostController.navigate(Screen.Detail.route, bundleOf("data" to news))
+                    })
             }
             composable(Screen.Saved.route) {
                 SavedScreen()
             }
             composable(Screen.Search.route) {
                 val viewModel = koinViewModel<SearchViewModel>()
-                SearchScreen(viewModel = viewModel)
+                SearchScreen(viewModel = viewModel, navigateToDetail = { news ->
+                    navHostController.navigate(Screen.Detail.route, bundleOf("data" to news))
+                })
             }
-
+            composable(Screen.Detail.route) {
+                val data = it.arguments?.getParcelable<NewsModel>("data")
+                DetailScreen(data = data!!)
+            }
         }
-
     }
-
 }

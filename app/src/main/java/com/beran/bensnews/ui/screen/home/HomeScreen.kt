@@ -29,6 +29,7 @@ import com.beran.core.domain.model.NewsModel
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
+    navigateToDetail: (NewsModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val state = viewModel.state
@@ -37,6 +38,7 @@ fun HomeScreen(
         error = state.error,
         headLineNews = state.headline,
         forYouNews = state.forYouNews,
+        navigateToDetail = navigateToDetail,
         modifier = modifier
     )
 
@@ -47,6 +49,7 @@ fun HomeContent(
     isLoading: Boolean,
     headLineNews: NewsModel?,
     forYouNews: List<NewsModel>,
+    navigateToDetail: (NewsModel) -> Unit,
     modifier: Modifier = Modifier,
     error: String? = null
 ) {
@@ -60,8 +63,16 @@ fun HomeContent(
         if (error != null) {
             ErrorView(message = error, modifier = Modifier.weight(1f))
         } else {
-            TopNewsSection(isLoading = isLoading, data = headLineNews)
-            ForYouSection(isLoading = isLoading, news = forYouNews)
+            TopNewsSection(
+                isLoading = isLoading,
+                data = headLineNews,
+                navigateToDetail = navigateToDetail
+            )
+            ForYouSection(
+                isLoading = isLoading,
+                news = forYouNews,
+                navigateToDetail = navigateToDetail
+            )
         }
     }
 }
@@ -70,6 +81,7 @@ fun HomeContent(
 fun ForYouSection(
     isLoading: Boolean,
     news: List<NewsModel>,
+    navigateToDetail: (NewsModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.padding(top = 24.dp, start = 24.dp, end = 24.dp)) {
@@ -92,7 +104,9 @@ fun ForYouSection(
                 }
             } else {
                 items(news, key = { it.url }) { item ->
-                    NewsItem(newsModel = item)
+                    NewsItem(newsModel = item, modifier = Modifier.clickable {
+                        navigateToDetail(item)
+                    })
                 }
             }
         }

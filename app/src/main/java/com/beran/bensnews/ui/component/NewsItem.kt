@@ -53,7 +53,7 @@ fun NewsItem(newsModel: NewsModel, modifier: Modifier = Modifier) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = newsModel.author ?: newsModel.source?.name ?: "Anonymous",
+                    text = newsModel.author ?: newsModel.source.orEmpty(),
                     style = MaterialTheme.typography.bodySmall,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,

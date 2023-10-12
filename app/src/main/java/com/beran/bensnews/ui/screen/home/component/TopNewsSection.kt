@@ -1,6 +1,7 @@
 package com.beran.bensnews.ui.screen.home.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,16 +29,24 @@ import com.beran.core.domain.model.NewsModel
 import com.beran.core.utils.DateUtils
 
 @Composable
-fun TopNewsSection(isLoading: Boolean, data: NewsModel?) {
+fun TopNewsSection(
+    isLoading: Boolean,
+    navigateToDetail: (NewsModel) -> Unit,
+    data: NewsModel?
+) {
     if (isLoading) {
         TopNewsShimmer()
     } else {
-        TopNewsContent(data = data)
+        TopNewsContent(data = data, navigateToDetail = navigateToDetail)
     }
 }
 
 @Composable
-fun TopNewsContent(data: NewsModel?, modifier: Modifier = Modifier) {
+fun TopNewsContent(
+    data: NewsModel?,
+    navigateToDetail: (NewsModel) -> Unit,
+    modifier: Modifier = Modifier
+) {
 
     val timeAgo = DateUtils.getTimeAgo(data?.publishedAt.orEmpty())
 
@@ -45,6 +54,7 @@ fun TopNewsContent(data: NewsModel?, modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 24.dp, vertical = 8.dp)
+            .clickable { navigateToDetail(data!!) }
     ) {
         Box {
 
@@ -82,7 +92,10 @@ fun TopNewsContent(data: NewsModel?, modifier: Modifier = Modifier) {
         )
         Spacer(modifier = Modifier.height(4.dp))
         Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-            Text(text = data?.author.orEmpty(), style = MaterialTheme.typography.bodySmall)
+            Text(
+                text = data?.author ?: data?.source.orEmpty(),
+                style = MaterialTheme.typography.bodySmall
+            )
             Text(text = timeAgo, style = MaterialTheme.typography.bodySmall)
         }
     }
@@ -99,7 +112,8 @@ fun TopNewsSectionPrev() {
                 urlToImage = null,
                 title = "Example of news title should like this style, this title will be remove next tine",
                 author = "beranju",
-            )
+            ),
+            navigateToDetail = {}
         )
     }
 }

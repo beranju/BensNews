@@ -34,11 +34,17 @@ fun ExploreTabSection(
     news: List<NewsModel>,
     pagerState: PagerState,
     isLoading: Boolean,
+    navigateToDetail: (NewsModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
         Tabs(pagerState = pagerState)
-        TabContent(news = news, pagerState = pagerState, isLoading = isLoading)
+        TabContent(
+            news = news,
+            pagerState = pagerState,
+            isLoading = isLoading,
+            navigateToDetail = navigateToDetail
+        )
     }
 }
 
@@ -47,18 +53,20 @@ fun ExploreTabSection(
 fun TabContent(
     news: List<NewsModel>,
     isLoading: Boolean,
-    pagerState: PagerState
+    pagerState: PagerState,
+    navigateToDetail: (NewsModel) -> Unit,
 ) {
     HorizontalPager(state = pagerState) { page ->
-        when (page) {
-            0 -> TabContentPage(news = news, isLoading = isLoading)
-            1 -> TabContentPage(news = news, isLoading = isLoading)
-            2 -> TabContentPage(news = news, isLoading = isLoading)
-            3 -> TabContentPage(news = news, isLoading = isLoading)
-            4 -> TabContentPage(news = news, isLoading = isLoading)
-            5 -> TabContentPage(news = news, isLoading = isLoading)
-            6 -> TabContentPage(news = news, isLoading = isLoading)
-        }
+        TabContentPage(news = news, isLoading = isLoading, navigateToDetail = navigateToDetail)
+//        when (page) {
+//            0 -> TabContentPage(news = news, isLoading = isLoading)
+//            1 -> TabContentPage(news = news, isLoading = isLoading)
+//            2 -> TabContentPage(news = news, isLoading = isLoading)
+//            3 -> TabContentPage(news = news, isLoading = isLoading)
+//            4 -> TabContentPage(news = news, isLoading = isLoading)
+//            5 -> TabContentPage(news = news, isLoading = isLoading)
+//            6 -> TabContentPage(news = news, isLoading = isLoading)
+//        }
     }
 }
 
@@ -66,6 +74,7 @@ fun TabContent(
 fun TabContentPage(
     news: List<NewsModel>,
     isLoading: Boolean,
+    navigateToDetail: (NewsModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier) {
@@ -76,7 +85,9 @@ fun TabContentPage(
                 }
             } else {
                 items(news, key = { it.url }) { item ->
-                    NewsItem(newsModel = item)
+                    NewsItem(
+                        newsModel = item,
+                        modifier = Modifier.clickable { navigateToDetail(item) })
                 }
             }
         }

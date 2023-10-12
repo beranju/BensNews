@@ -10,10 +10,6 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.beran.bensnews.ui.component.ErrorView
@@ -27,6 +23,7 @@ import com.beran.core.domain.model.NewsModel
 fun ExploreScreen(
     viewModel: ExploreViewModel,
     navigateToSearch: () -> Unit,
+    navigateToDetail: (NewsModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val state = viewModel.state
@@ -46,6 +43,7 @@ fun ExploreScreen(
         isLoading = state.isLoading,
         error = state.error,
         pagerState = pagerState,
+        navigateToDetail = navigateToDetail,
         modifier = modifier
     )
 }
@@ -58,6 +56,7 @@ private fun ExploreContent(
     isLoading: Boolean,
     error: String?,
     pagerState: PagerState,
+    navigateToDetail: (NewsModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -73,7 +72,8 @@ private fun ExploreContent(
             ExploreTabSection(
                 news = news,
                 isLoading = isLoading,
-                pagerState = pagerState
+                pagerState = pagerState,
+                navigateToDetail = navigateToDetail
             )
         }
     }

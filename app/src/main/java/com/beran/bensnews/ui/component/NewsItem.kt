@@ -1,6 +1,5 @@
 package com.beran.bensnews.ui.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,9 +24,13 @@ import coil.compose.AsyncImage
 import com.beran.bensnews.R
 import com.beran.bensnews.ui.theme.BensNewsTheme
 import com.beran.core.domain.model.NewsModel
+import com.beran.core.utils.DateUtils.getTimeAgo
 
 @Composable
 fun NewsItem(newsModel: NewsModel, modifier: Modifier = Modifier) {
+
+    val timeAgo = getTimeAgo(newsModel.publishedAt.orEmpty())
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -49,29 +52,28 @@ fun NewsItem(newsModel: NewsModel, modifier: Modifier = Modifier) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = newsModel.author.orEmpty(), style = MaterialTheme.typography.bodySmall)
-                Text(text = newsModel.publishedAt, style = MaterialTheme.typography.bodySmall)
+                Text(
+                    text = newsModel.author ?: newsModel.source?.name ?: "Anonymous",
+                    style = MaterialTheme.typography.bodySmall,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
+                    modifier = Modifier.weight(1f)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = timeAgo, style = MaterialTheme.typography.bodySmall)
             }
         }
         Spacer(modifier = Modifier.width(24.dp))
-        if (newsModel.urlToImage == null) {
-            Image(
-                painter = painterResource(id = R.drawable.img_koran), contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(100.dp)
-                    .clip(RoundedCornerShape(10.dp))
-            )
-        } else {
-            AsyncImage(
-                model = newsModel.urlToImage,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(100.dp)
-                    .clip(RoundedCornerShape(10.dp))
-            )
-        }
+        AsyncImage(
+            model = newsModel.urlToImage,
+            contentDescription = null,
+            placeholder = painterResource(id = R.drawable.img_koran),
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(100.dp)
+                .clip(RoundedCornerShape(10.dp))
+        )
+
     }
 
 }
@@ -82,6 +84,7 @@ fun NewsItemPrev() {
     BensNewsTheme {
         NewsItem(
             newsModel = NewsModel(
+                url = "",
                 publishedAt = "1 hour ago",
                 urlToImage = null,
                 title = "Example of news title should like this style, this title will be remove next tine",

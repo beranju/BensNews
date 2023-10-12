@@ -1,6 +1,5 @@
 package com.beran.bensnews.ui.screen.home.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,36 +25,39 @@ import coil.compose.AsyncImage
 import com.beran.bensnews.R
 import com.beran.bensnews.ui.theme.BensNewsTheme
 import com.beran.core.domain.model.NewsModel
+import com.beran.core.utils.DateUtils
 
 @Composable
-fun TopNewsSection(data: NewsModel, modifier: Modifier = Modifier) {
+fun TopNewsSection(isLoading: Boolean, data: NewsModel?) {
+    if (isLoading) {
+        TopNewsShimmer()
+    } else {
+        TopNewsContent(data = data)
+    }
+}
+
+@Composable
+fun TopNewsContent(data: NewsModel?, modifier: Modifier = Modifier) {
+
+    val timeAgo = DateUtils.getTimeAgo(data?.publishedAt.orEmpty())
+
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp)
+            .padding(horizontal = 24.dp, vertical = 8.dp)
     ) {
         Box {
-            if (data.urlToImage == null) {
-                Image(
-                    painter = painterResource(id = R.drawable.img_koran),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(180.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                )
-            } else {
-                AsyncImage(
-                    model = data.urlToImage,
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(180.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                )
-            }
+
+            AsyncImage(
+                model = data?.urlToImage,
+                placeholder = painterResource(id = R.drawable.img_koran),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(180.dp)
+                    .clip(RoundedCornerShape(10.dp))
+            )
             Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(12.dp)) {
                 Text(
                     text = "Trending",
@@ -73,15 +75,15 @@ fun TopNewsSection(data: NewsModel, modifier: Modifier = Modifier) {
         }
         Spacer(modifier = Modifier.height(20.dp))
         Text(
-            text = data.title.orEmpty(),
+            text = data?.title.orEmpty(),
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.titleMedium
         )
         Spacer(modifier = Modifier.height(4.dp))
         Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-            Text(text = data.author.orEmpty(), style = MaterialTheme.typography.bodySmall)
-            Text(text = data.publishedAt, style = MaterialTheme.typography.bodySmall)
+            Text(text = data?.author.orEmpty(), style = MaterialTheme.typography.bodySmall)
+            Text(text = timeAgo, style = MaterialTheme.typography.bodySmall)
         }
     }
 }
@@ -90,8 +92,9 @@ fun TopNewsSection(data: NewsModel, modifier: Modifier = Modifier) {
 @Composable
 fun TopNewsSectionPrev() {
     BensNewsTheme {
-        TopNewsSection(
+        TopNewsContent(
             data = NewsModel(
+                url = "",
                 publishedAt = "1 hour ago",
                 urlToImage = null,
                 title = "Example of news title should like this style, this title will be remove next tine",

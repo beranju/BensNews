@@ -15,12 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.beran.bensnews.R
 import com.beran.bensnews.ui.theme.BensNewsTheme
+import com.beran.core.utils.DateUtils.getCurrentDayDate
 
 @Composable
 fun HomeAppBar(modifier: Modifier = Modifier) {
+    val currentDate = getCurrentDayDate()
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -28,13 +29,14 @@ fun HomeAppBar(modifier: Modifier = Modifier) {
     ) {
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = "Headline",
-                style = MaterialTheme.typography.displayMedium.copy(fontSize = 24.sp)
+                text = stringResource(R.string.headline),
+                style = MaterialTheme.typography.headlineLarge
             )
-            Text(text = "Today, October 23th")
+            Text(text = currentDate, style = MaterialTheme.typography.bodyMedium)
         }
         Icon(
             imageVector = Icons.Default.Notifications,
+            tint = MaterialTheme.colorScheme.primary,
             contentDescription = stringResource(R.string.notification_icon)
         )
     }

@@ -8,13 +8,13 @@ object DataMapper {
     fun articleItemToNewsModel(input: ArticlesItem): NewsModel {
         val source = input.source?.let { SourceModel(name = it.name, id = it.id.toString()) }
         return NewsModel(
-            publishedAt = input.publishedAt.orEmpty(),
+            publishedAt = input.publishedAt,
             author = input.author,
             urlToImage = input.urlToImage,
             description = input.description,
             source = source,
             title = input.title,
-            url = input.url,
+            url = input.url.orEmpty(),
             content = input.content
         )
     }

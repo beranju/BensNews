@@ -13,8 +13,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.beran.bensnews.ui.component.BottomBar
 import com.beran.bensnews.ui.navigation.Screen
 import com.beran.bensnews.ui.screen.ExploreScreen
-import com.beran.bensnews.ui.screen.HomeScreen
 import com.beran.bensnews.ui.screen.SavedScreen
+import com.beran.bensnews.ui.screen.home.HomeScreen
+import com.beran.bensnews.ui.screen.home.HomeViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,7 +40,8 @@ fun AppSetup(
             modifier = Modifier.padding(paddingValues)
         ) {
             composable(Screen.Home.route) {
-                HomeScreen()
+                val viewModel = koinViewModel<HomeViewModel>()
+                HomeScreen(viewModel = viewModel)
             }
             composable(Screen.Explore.route) {
                 ExploreScreen()

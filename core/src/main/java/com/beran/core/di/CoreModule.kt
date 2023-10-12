@@ -19,7 +19,7 @@ val networkModule = module {
         val authInterceptor = Interceptor { chain ->
             val request = chain.request()
             val newRequest = request.newBuilder()
-                .addHeader("Authorization", "apiKey $API_KEY")
+                .addHeader("X-Api-Key", API_KEY)
                 .build()
             chain.proceed(newRequest)
         }

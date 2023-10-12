@@ -1,5 +1,6 @@
 package com.beran.bensnews.di
 
+import com.beran.bensnews.ui.screen.explore.ExploreViewModel
 import com.beran.bensnews.ui.screen.home.HomeViewModel
 import com.beran.core.domain.usecase.NewsInteractor
 import com.beran.core.domain.usecase.NewsUseCase
@@ -12,4 +13,5 @@ val useCaseModule = module {
 
 val viewModelModule = module {
     viewModel { HomeViewModel(get()) }
+    viewModel { ExploreViewModel(get()) }
 }

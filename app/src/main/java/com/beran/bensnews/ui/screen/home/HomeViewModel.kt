@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.beran.core.domain.common.Resource
 import com.beran.core.domain.usecase.NewsUseCase
+import com.beran.core.utils.Constants
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
@@ -23,12 +24,14 @@ class HomeViewModel(private val newsUseCase: NewsUseCase) : ViewModel() {
             newsUseCase.getAllNews().collect { result ->
                 when (result) {
                     is Resource.Success -> {
-                        val headlineNews = result.data.random()
+                        // ** memfilter data dari item yang terhapus oleh provider api nya
+                        val data = result.data.filter { it.url != Constants.REMOVED_URL }
+                        val headlineNews = data.random()
                         state = state.copy(
                             loading = false,
                             error = null,
                             headline = headlineNews,
-                            forYouNews = result.data
+                            forYouNews = data
                         )
                     }
 

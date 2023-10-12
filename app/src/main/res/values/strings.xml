@@ -5,4 +5,5 @@
     <string name="saved">Saved</string>
     <string name="notification_icon">Notification Icon</string>
     <string name="headline">Headline</string>
+    <string name="search_hint">Search on Headlines</string>
 </resources>

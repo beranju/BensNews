@@ -4,6 +4,7 @@ import com.beran.core.data.remote.retrofit.ApiService
 import com.beran.core.domain.common.Resource
 import com.beran.core.domain.model.NewsModel
 import com.beran.core.domain.repository.INewsRepository
+import com.beran.core.utils.Constants.COUNTRY_US
 import com.beran.core.utils.DataMapper.articleItemToNewsModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -25,7 +26,7 @@ class NewsRepository(
         flow {
             emit(Resource.Loading)
             try {
-                val response = apiService.fetchAllNews()
+                val response = apiService.fetchAllNews(category = category, country = country ?: COUNTRY_US)
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body?.articles?.isNotEmpty() == true) {
@@ -58,4 +59,16 @@ class NewsRepository(
             }
         }
             .flowOn(Dispatchers.IO)
+
+    override fun getNewsByQuery(
+        page: Int?,
+        pageSize: Int?,
+        query: String,
+        searchIn: String?
+    ): Flow<Resource<List<NewsModel>>> =
+        flow<Resource<List<NewsModel>>> {
+            emit(Resource.Loading)
+        }
+            .flowOn(Dispatchers.IO)
+
 }

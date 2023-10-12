@@ -11,4 +11,11 @@ interface INewsRepository {
         country: String? = null,
         category: String? = null
     ): Flow<Resource<List<NewsModel>>>
+
+    fun getNewsByQuery(
+        page: Int? = null,
+        pageSize: Int? = null,
+        query: String,
+        searchIn: String? = null
+    ): Flow<Resource<List<NewsModel>>>
 }

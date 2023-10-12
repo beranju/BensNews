@@ -12,8 +12,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.beran.bensnews.ui.component.BottomBar
 import com.beran.bensnews.ui.navigation.Screen
-import com.beran.bensnews.ui.screen.ExploreScreen
 import com.beran.bensnews.ui.screen.SavedScreen
+import com.beran.bensnews.ui.screen.explore.ExploreScreen
+import com.beran.bensnews.ui.screen.explore.ExploreViewModel
+import com.beran.bensnews.ui.screen.explore.search.SearchScreen
 import com.beran.bensnews.ui.screen.home.HomeScreen
 import com.beran.bensnews.ui.screen.home.HomeViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -44,10 +46,16 @@ fun AppSetup(
                 HomeScreen(viewModel = viewModel)
             }
             composable(Screen.Explore.route) {
-                ExploreScreen()
+                val viewModel = koinViewModel<ExploreViewModel>()
+                ExploreScreen(viewModel = viewModel, navigateToSearch = {
+                    navHostController.navigate(Screen.Search.route)
+                })
             }
             composable(Screen.Saved.route) {
                 SavedScreen()
+            }
+            composable(Screen.Search.route) {
+                SearchScreen()
             }
 
         }

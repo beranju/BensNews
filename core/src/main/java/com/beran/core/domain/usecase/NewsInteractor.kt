@@ -12,5 +12,12 @@ class NewsInteractor(private val repository: INewsRepository): NewsUseCase {
         pageSize: Int?,
         country: String?,
         category: String?
-    ): Flow<Resource<List<NewsModel>>>  = repository.getAllNews()
+    ): Flow<Resource<List<NewsModel>>>  = repository.getAllNews(category = category, country = country)
+
+    override fun getNewsByQuery(
+        page: Int?,
+        pageSize: Int?,
+        query: String,
+        searchIn: String?
+    ): Flow<Resource<List<NewsModel>>> = repository.getNewsByQuery(query = query, searchIn = searchIn)
 }

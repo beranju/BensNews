@@ -13,7 +13,7 @@ interface ApiService {
         @Query("pageSize") pageSize: Int = 20,
         @Query("page") page: Int = 1,
         @Query("country") country: String = "us",
-//        @Query("category") category: String = ""
+        @Query("category") category: String? = null
     ): Response<NewsApiResponse>
 
     @GET("everything")
@@ -21,5 +21,6 @@ interface ApiService {
         @Query("pageSize") pageSize: Int? = null,
         @Query("page") page: Int? = null,
         @Query("q") query: String? = null,
+        @Query("searchIn") searchIn: String? = null,
     ): Response<NewsApiResponse>
 }

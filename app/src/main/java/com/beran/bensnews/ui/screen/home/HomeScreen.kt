@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -19,6 +18,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import com.beran.bensnews.ui.component.ErrorView
 import com.beran.bensnews.ui.component.NewsItem
 import com.beran.bensnews.ui.component.NewsItemShimmer
@@ -33,11 +36,13 @@ fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
     val state = viewModel.state
+    val pagingNews = viewModel.getPagingNews().collectAsLazyPagingItems()
     HomeContent(
         isLoading = state.loading,
         error = state.error,
         headLineNews = state.headline,
         forYouNews = state.forYouNews,
+        pagingNews = pagingNews,
         navigateToDetail = navigateToDetail,
         modifier = modifier
     )
@@ -49,6 +54,7 @@ fun HomeContent(
     isLoading: Boolean,
     headLineNews: NewsModel?,
     forYouNews: List<NewsModel>,
+    pagingNews: LazyPagingItems<NewsModel>,
     navigateToDetail: (NewsModel) -> Unit,
     modifier: Modifier = Modifier,
     error: String? = null
@@ -71,6 +77,7 @@ fun HomeContent(
             ForYouSection(
                 isLoading = isLoading,
                 news = forYouNews,
+                pagingNews = pagingNews,
                 navigateToDetail = navigateToDetail
             )
         }
@@ -81,6 +88,7 @@ fun HomeContent(
 fun ForYouSection(
     isLoading: Boolean,
     news: List<NewsModel>,
+    pagingNews: LazyPagingItems<NewsModel>,
     navigateToDetail: (NewsModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -103,11 +111,52 @@ fun ForYouSection(
                     NewsItemShimmer()
                 }
             } else {
-                items(news, key = { it.url }) { item ->
-                    NewsItem(newsModel = item, modifier = Modifier.clickable {
+                items(pagingNews.itemCount, key = pagingNews.itemKey { it.url }) { index ->
+                    val item = pagingNews[index]
+                    NewsItem(newsModel = item!!, modifier = Modifier.clickable {
                         navigateToDetail(item)
                     })
                 }
+                pagingNews.apply {
+                    when {
+                        loadState.prepend is LoadState.Loading -> {
+                            items(5) {
+                                NewsItemShimmer()
+                            }
+
+                        }
+
+                        loadState.prepend is LoadState.Error -> {
+                            item { ErrorView(message = "", modifier = Modifier.weight(1f)) }
+                        }
+
+                        loadState.append is LoadState.Loading -> {
+                            items(5) {
+                                NewsItemShimmer()
+                            }
+
+                        }
+
+                        loadState.append is LoadState.Error -> {
+                            item { ErrorView(message = "", modifier = Modifier.weight(1f)) }
+                        }
+
+                        loadState.refresh is LoadState.Loading -> {
+                            items(5) {
+                                NewsItemShimmer()
+                            }
+                        }
+
+                        loadState.refresh is LoadState.Error -> {
+                            item { ErrorView(message = "", modifier = Modifier.weight(1f)) }
+                        }
+                    }
+                }
+//                items(news, key = { it.url }) { item ->
+//                    NewsItem(newsModel = item, modifier = Modifier.clickable {
+//                        navigateToDetail(item)
+//                    })
+//                }
             }
         }
     }

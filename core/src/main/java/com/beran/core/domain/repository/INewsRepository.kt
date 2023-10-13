@@ -1,10 +1,13 @@
 package com.beran.core.domain.repository
 
+import androidx.paging.PagingData
 import com.beran.core.domain.common.Resource
 import com.beran.core.domain.model.NewsModel
 import kotlinx.coroutines.flow.Flow
 
 interface INewsRepository {
+
+    fun getPagingNews(): Flow<PagingData<NewsModel>>
     fun getAllNews(
         page: Int? = null,
         pageSize: Int? = null,

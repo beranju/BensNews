@@ -8,4 +8,6 @@ object Constants {
 
     const val REMOVED_URL = "https://removed.com"
     const val COUNTRY_US = "us"
+
+    const val INITIAL_PAGE_INDEX = 1
 }

@@ -72,7 +72,12 @@ fun SavedContent(
                     }
                 } else {
                     if (news.isEmpty()) {
-                        item() { EmptyView(message = "Your saved news is empty") }
+                        item() {
+                            EmptyView(
+                                message = "Your saved news is empty",
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
                     } else {
                         items(news, key = { it.url }) { item ->
                             NewsItem(

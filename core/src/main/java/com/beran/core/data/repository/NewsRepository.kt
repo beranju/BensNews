@@ -1,5 +1,9 @@
 package com.beran.core.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.beran.core.data.NewsPagingSource
 import com.beran.core.data.local.room.NewsDao
 import com.beran.core.data.remote.retrofit.ApiService
 import com.beran.core.domain.common.Resource
@@ -21,6 +25,14 @@ class NewsRepository(
     private val apiService: ApiService,
     private val newsDao: NewsDao
 ) : INewsRepository {
+    override fun getPagingNews(): Flow<PagingData<NewsModel>> =
+        Pager(
+            config = PagingConfig(pageSize = 4),
+            pagingSourceFactory = {
+                NewsPagingSource(apiService)
+            }
+        ).flow.flowOn(Dispatchers.IO)
+
     override fun getAllNews(
         page: Int?,
         pageSize: Int?,

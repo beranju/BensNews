@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.beran.core.domain.common.Resource
 import com.beran.core.domain.usecase.NewsUseCase
 import com.beran.core.utils.Constants
@@ -18,6 +19,8 @@ class HomeViewModel(private val newsUseCase: NewsUseCase) : ViewModel() {
     init {
         fetchAllNews()
     }
+
+    fun getPagingNews() = newsUseCase.getPagingNews().cachedIn(viewModelScope)
 
     private fun fetchAllNews() {
         viewModelScope.launch {

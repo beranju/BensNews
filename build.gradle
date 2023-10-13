@@ -17,6 +17,8 @@ buildscript {
         coil_compose_version = '2.4.0'
         lottie_compose_version = '6.0.0'
         gson_version = '2.10.1'
+        paging_version = '3.1.0'
+        paging_compose_version = '3.3.0-alpha02'
 
         junit_version = "4.13.2"
         mockito_version = "5.5.0"

@@ -1,11 +1,13 @@
 package com.beran.core.domain.usecase
 
+import androidx.paging.PagingData
 import com.beran.core.domain.common.Resource
 import com.beran.core.domain.model.NewsModel
 import com.beran.core.domain.repository.INewsRepository
 import kotlinx.coroutines.flow.Flow
 
 class NewsInteractor(private val repository: INewsRepository) : NewsUseCase {
+    override fun getPagingNews(): Flow<PagingData<NewsModel>> = repository.getPagingNews()
     override fun getAllNews(
         page: Int?,
         pageSize: Int?,

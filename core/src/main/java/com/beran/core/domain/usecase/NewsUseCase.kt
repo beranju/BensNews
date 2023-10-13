@@ -1,10 +1,12 @@
 package com.beran.core.domain.usecase
 
+import androidx.paging.PagingData
 import com.beran.core.domain.common.Resource
 import com.beran.core.domain.model.NewsModel
 import kotlinx.coroutines.flow.Flow
 
 interface NewsUseCase {
+    fun getPagingNews(): Flow<PagingData<NewsModel>>
     fun getAllNews(
         page: Int? = null,
         pageSize: Int? = null,

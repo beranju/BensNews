@@ -1,6 +1,7 @@
 package com.beran.bensnews.ui.screen.saved
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.beran.bensnews.R
@@ -105,16 +107,25 @@ fun SavedCardHint(
                 .height(150.dp)
                 .clip(RoundedCornerShape(10.dp))
         )
-        Text(
-            text = "Explore more news and saved it",
-            style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center,
+        Box(
             modifier = Modifier
-                .align(Alignment.Center)
                 .fillMaxWidth()
-                .padding(24.dp)
-        )
+                .height(150.dp)
+                .background(color = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f))
+                .clip(RoundedCornerShape(10.dp))
+        ) {
+            Text(
+                text = stringResource(R.string.explore_hint),
+                style = MaterialTheme.typography.titleMedium,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .fillMaxWidth()
+                    .padding(24.dp)
+            )
 
+        }
     }
 }
 
@@ -125,6 +136,9 @@ fun SavedAppBar(modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .height(60.dp)
     ) {
-        Text(text = "Saved News", style = MaterialTheme.typography.labelLarge)
+        Text(
+            text = stringResource(R.string.saved_news_title),
+            style = MaterialTheme.typography.labelLarge
+        )
     }
 }

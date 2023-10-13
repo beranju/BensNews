@@ -13,4 +13,6 @@
     <string name="snackbar_message">news %s successfully</string>
     <string name="read_more">Read More</string>
     <string name="select_browser">Select Browser</string>
+    <string name="explore_hint">Explore more news and saved it</string>
+    <string name="saved_news_title">Saved News</string>
 </resources>

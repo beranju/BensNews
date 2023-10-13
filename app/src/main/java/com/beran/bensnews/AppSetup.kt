@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.core.os.bundleOf
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -52,6 +53,14 @@ fun AppSetup(
                 val viewModel = koinViewModel<HomeViewModel>()
                 HomeScreen(viewModel = viewModel, navigateToDetail = { news ->
                     navHostController.navigate(Screen.Detail.route, bundleOf("data" to news))
+                }, navigateToExplore = {
+                    navHostController.navigate(Screen.Explore.route) {
+                        popUpTo(navHostController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        restoreState = true
+                        launchSingleTop = true
+                    }
                 })
             }
             composable(Screen.Explore.route) {
@@ -67,7 +76,7 @@ fun AppSetup(
                 val viewModel = koinViewModel<SavedViewModel>()
                 SavedScreen(
                     viewModel = viewModel,
-                    navigateToDetail = {news ->
+                    navigateToDetail = { news ->
                         navHostController.navigate(Screen.Detail.route, bundleOf("data" to news))
                     }
                 )

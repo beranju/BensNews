@@ -24,7 +24,7 @@ class HomeViewModel(private val newsUseCase: NewsUseCase) : ViewModel() {
 
     private fun fetchAllNews() {
         viewModelScope.launch {
-            newsUseCase.getAllNews().collect { result ->
+            newsUseCase.getAllNews(pageSize = 10).collect { result ->
                 when (result) {
                     is Resource.Success -> {
                         // ** memfilter data dari item yang terhapus oleh provider api nya
@@ -34,7 +34,6 @@ class HomeViewModel(private val newsUseCase: NewsUseCase) : ViewModel() {
                             loading = false,
                             error = null,
                             headline = headlineNews,
-                            forYouNews = data
                         )
                     }
 
@@ -42,14 +41,12 @@ class HomeViewModel(private val newsUseCase: NewsUseCase) : ViewModel() {
                         loading = false,
                         error = result.message,
                         headline = null,
-                        forYouNews = emptyList()
                     )
 
                     is Resource.Loading -> state = state.copy(
                         loading = true,
                         error = null,
                         headline = null,
-                        forYouNews = emptyList()
                     )
                 }
             }

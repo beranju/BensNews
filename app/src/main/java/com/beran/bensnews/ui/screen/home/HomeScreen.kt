@@ -17,11 +17,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import com.beran.bensnews.R
 import com.beran.bensnews.ui.component.ErrorView
 import com.beran.bensnews.ui.component.NewsItem
 import com.beran.bensnews.ui.component.NewsItemShimmer
@@ -32,7 +34,7 @@ import com.beran.core.domain.model.NewsModel
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
-    navigateToDetail: (NewsModel) -> Unit,
+    navigateToDetail: (NewsModel) -> Unit, navigateToExplore: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val state = viewModel.state
@@ -41,9 +43,9 @@ fun HomeScreen(
         isLoading = state.loading,
         error = state.error,
         headLineNews = state.headline,
-        forYouNews = state.forYouNews,
         pagingNews = pagingNews,
         navigateToDetail = navigateToDetail,
+        navigateToExplore = navigateToExplore,
         modifier = modifier
     )
 
@@ -53,9 +55,8 @@ fun HomeScreen(
 fun HomeContent(
     isLoading: Boolean,
     headLineNews: NewsModel?,
-    forYouNews: List<NewsModel>,
     pagingNews: LazyPagingItems<NewsModel>,
-    navigateToDetail: (NewsModel) -> Unit,
+    navigateToDetail: (NewsModel) -> Unit, navigateToExplore: () -> Unit,
     modifier: Modifier = Modifier,
     error: String? = null
 ) {
@@ -76,9 +77,9 @@ fun HomeContent(
             )
             ForYouSection(
                 isLoading = isLoading,
-                news = forYouNews,
                 pagingNews = pagingNews,
-                navigateToDetail = navigateToDetail
+                navigateToDetail = navigateToDetail,
+                navigateToExplore = navigateToExplore
             )
         }
     }
@@ -87,9 +88,8 @@ fun HomeContent(
 @Composable
 fun ForYouSection(
     isLoading: Boolean,
-    news: List<NewsModel>,
     pagingNews: LazyPagingItems<NewsModel>,
-    navigateToDetail: (NewsModel) -> Unit,
+    navigateToDetail: (NewsModel) -> Unit, navigateToExplore: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.padding(top = 24.dp, start = 24.dp, end = 24.dp)) {
@@ -98,11 +98,14 @@ fun ForYouSection(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = "ForYou", style = MaterialTheme.typography.labelLarge)
             Text(
-                text = "View more",
+                text = stringResource(R.string.foryou),
+                style = MaterialTheme.typography.labelLarge
+            )
+            Text(
+                text = stringResource(R.string.view_more),
                 style = MaterialTheme.typography.labelMedium,
-                modifier = Modifier.clickable { })
+                modifier = Modifier.clickable { navigateToExplore() })
         }
         Spacer(modifier = Modifier.height(12.dp))
         LazyColumn(modifier = Modifier.height(400.dp)) {
@@ -127,7 +130,12 @@ fun ForYouSection(
                         }
 
                         loadState.prepend is LoadState.Error -> {
-                            item { ErrorView(message = "", modifier = Modifier.weight(1f)) }
+                            item {
+                                ErrorView(
+                                    message = stringResource(R.string.default_error_text),
+                                    modifier = Modifier.weight(1f)
+                                )
+                            }
                         }
 
                         loadState.append is LoadState.Loading -> {
@@ -138,7 +146,12 @@ fun ForYouSection(
                         }
 
                         loadState.append is LoadState.Error -> {
-                            item { ErrorView(message = "", modifier = Modifier.weight(1f)) }
+                            item {
+                                ErrorView(
+                                    message = stringResource(R.string.default_error_text),
+                                    modifier = Modifier.weight(1f)
+                                )
+                            }
                         }
 
                         loadState.refresh is LoadState.Loading -> {
@@ -148,15 +161,15 @@ fun ForYouSection(
                         }
 
                         loadState.refresh is LoadState.Error -> {
-                            item { ErrorView(message = "", modifier = Modifier.weight(1f)) }
+                            item {
+                                ErrorView(
+                                    message = stringResource(R.string.default_error_text),
+                                    modifier = Modifier.weight(1f)
+                                )
+                            }
                         }
                     }
                 }
-//                items(news, key = { it.url }) { item ->
-//                    NewsItem(newsModel = item, modifier = Modifier.clickable {
-//                        navigateToDetail(item)
-//                    })
-//                }
             }
         }
     }

@@ -15,4 +15,8 @@
     <string name="select_browser">Select Browser</string>
     <string name="explore_hint">Explore more news and saved it</string>
     <string name="saved_news_title">Saved News</string>
+    <string name="view_more">View more</string>
+    <string name="foryou">ForYou</string>
+    <string name="default_error_text">Something went wrong, try again</string>
+    <string name="coming_soon">Coming soon</string>
 </resources>

@@ -21,6 +21,6 @@ interface ApiService {
         @Query("pageSize") pageSize: Int? = null,
         @Query("page") page: Int? = null,
         @Query("q") query: String? = null,
-        @Query("searchIn") searchIn: String? = null,
+        @Query("sortBy") sortBy: String? = null,
     ): Response<NewsApiResponse>
 }

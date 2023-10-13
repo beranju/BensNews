@@ -19,4 +19,5 @@
     <string name="foryou">ForYou</string>
     <string name="default_error_text">Something went wrong, try again</string>
     <string name="coming_soon">Coming soon</string>
+    <string name="sort_by">Sort By</string>
 </resources>

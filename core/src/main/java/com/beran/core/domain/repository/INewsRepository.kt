@@ -19,7 +19,7 @@ interface INewsRepository {
         page: Int? = null,
         pageSize: Int? = null,
         query: String,
-        searchIn: String? = null
+        sortBy: String? = null
     ): Flow<Resource<List<NewsModel>>>
 
     fun getAllSavedNews(): Flow<Resource<List<NewsModel>>>

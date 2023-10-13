@@ -16,14 +16,17 @@ class SearchViewModel(private val newsUseCase: NewsUseCase) : ViewModel() {
     var state by mutableStateOf(SearchState())
         private set
 
-
     fun onSearchTextChange(text: String) {
         state = state.copy(query = text)
     }
 
+    fun onSelectedSortChange(text: String) {
+        state = state.copy(sort = text)
+    }
+
     fun getNewsByQuery() {
         viewModelScope.launch {
-            newsUseCase.getNewsByQuery(query = state.query).collect { result ->
+            newsUseCase.getNewsByQuery(query = state.query, sortBy = state.sort).collect { result ->
                 state = when (result) {
                     is Resource.Loading -> state.copy(isLoading = true, error = null, news = emptyList())
 

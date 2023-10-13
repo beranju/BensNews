@@ -20,9 +20,9 @@ class NewsInteractor(private val repository: INewsRepository) : NewsUseCase {
         page: Int?,
         pageSize: Int?,
         query: String,
-        searchIn: String?
+        sortBy: String?
     ): Flow<Resource<List<NewsModel>>> =
-        repository.getNewsByQuery(query = query, searchIn = searchIn)
+        repository.getNewsByQuery(query = query, sortBy = sortBy)
 
     override fun getAllSavedNews(): Flow<Resource<List<NewsModel>>> = repository.getAllSavedNews()
 

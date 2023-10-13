@@ -81,12 +81,12 @@ class NewsRepository(
         page: Int?,
         pageSize: Int?,
         query: String,
-        searchIn: String?
+        sortBy: String?
     ): Flow<Resource<List<NewsModel>>> =
         flow<Resource<List<NewsModel>>> {
             emit(Resource.Loading)
             try {
-                val response = apiService.findNewsByQuery(query = query)
+                val response = apiService.findNewsByQuery(query = query, sortBy = sortBy)
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body?.articles?.isNotEmpty() == true) {

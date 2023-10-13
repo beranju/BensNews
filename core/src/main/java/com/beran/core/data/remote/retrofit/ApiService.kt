@@ -2,6 +2,7 @@ package com.beran.core.data.remote.retrofit
 
 import com.beran.core.data.remote.response.NewsApiResponse
 import com.beran.core.utils.Constants.API_KEY
+import com.beran.core.utils.Constants.COUNTRY_US
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -12,7 +13,7 @@ interface ApiService {
     suspend fun fetchAllNews(
         @Query("pageSize") pageSize: Int = 20,
         @Query("page") page: Int = 1,
-        @Query("country") country: String = "us",
+        @Query("country") country: String = COUNTRY_US,
         @Query("category") category: String? = null
     ): Response<NewsApiResponse>
 

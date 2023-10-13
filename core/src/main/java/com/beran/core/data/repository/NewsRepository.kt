@@ -56,21 +56,21 @@ class NewsRepository(
                     }
                 } else {
                     val error = when (response.code()) {
-                        500 -> "Server error, coba lagi nanti"
-                        400 -> "System error, coba lagi"
-                        else -> "Terjadi masalah, coba lagi"
+                        500 -> "Server error, please try again letter"
+                        400 -> "Server error, please try again"
+                        else -> "There is a problem, please try again"
                     }
                     emit(Resource.Error(error))
                 }
             } catch (e: IOException) {
-                emit(Resource.Error("Periksa Koneksi Internet Anda"))
+                emit(Resource.Error("Check your connection"))
             } catch (e: SocketTimeoutException) {
-                emit(Resource.Error("Waktu koneksi habis, ulangi"))
+                emit(Resource.Error("Timeout, please try again"))
             } catch (e: HttpException) {
                 val error = when (e.code()) {
-                    500 -> "Server error, coba lagi nanti"
-                    400 -> "System error, coba lagi"
-                    else -> "Terjadi masalah, coba lagi"
+                    500 -> "Server error, please try again letter"
+                    400 -> "Server error, please try again"
+                    else -> "There is a problem, please try again"
                 }
                 emit(Resource.Error(error))
             }
@@ -99,21 +99,21 @@ class NewsRepository(
                     }
                 } else {
                     val error = when (response.code()) {
-                        500 -> "Server error, coba lagi nanti"
-                        400 -> "System error, coba lagi"
-                        else -> "Terjadi masalah, coba lagi"
+                        500 -> "Server error, please try again letter"
+                        400 -> "Server error, please try again"
+                        else -> "There is a problem, please try again"
                     }
                     emit(Resource.Error(error))
                 }
             } catch (e: IOException) {
-                emit(Resource.Error("Periksa Koneksi Internet Anda"))
+                emit(Resource.Error("Check your connection"))
             } catch (e: SocketTimeoutException) {
-                emit(Resource.Error("Waktu koneksi habis, ulangi"))
+                emit(Resource.Error("Timeout, please try again"))
             } catch (e: HttpException) {
                 val error = when (e.code()) {
-                    500 -> "Server error, coba lagi nanti"
-                    400 -> "System error, coba lagi"
-                    else -> "Terjadi masalah, coba lagi"
+                    500 -> "Server error, please try again letter"
+                    400 -> "Server error, please try again"
+                    else -> "There is a problem, please try again"
                 }
                 emit(Resource.Error(error))
             }
@@ -133,7 +133,7 @@ class NewsRepository(
                     }
                 }
             } catch (e: Exception) {
-                emit(Resource.Error("Terjadi Kesalahan, coba lagi"))
+                emit(Resource.Error("There is a problem, please try again"))
             }
         }
             .flowOn(Dispatchers.Default)
@@ -149,6 +149,4 @@ class NewsRepository(
         val data = newModelToNewEntity(newsModel)
         newsDao.deleteNews(data)
     }
-
-
 }

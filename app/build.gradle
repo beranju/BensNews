@@ -67,6 +67,7 @@ dependencies {
     implementation("io.coil-kt:coil-compose:$coil_compose_version")
     implementation("com.airbnb.android:lottie-compose:$lottie_compose_version")
     implementation("com.google.code.gson:gson:$gson_version")
+    implementation ("androidx.core:core-splashscreen:1.0.1")
 
     androidTestImplementation platform('androidx.compose:compose-bom:2022.10.00')
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")

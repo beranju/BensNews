@@ -1,11 +1,14 @@
 package com.beran.core.data.repository
 
+import com.beran.core.data.local.room.NewsDao
 import com.beran.core.data.remote.retrofit.ApiService
 import com.beran.core.domain.common.Resource
 import com.beran.core.domain.model.NewsModel
 import com.beran.core.domain.repository.INewsRepository
 import com.beran.core.utils.Constants.COUNTRY_US
 import com.beran.core.utils.DataMapper.articleItemToNewsModel
+import com.beran.core.utils.DataMapper.newModelToNewEntity
+import com.beran.core.utils.DataMapper.newsEntityToNewsModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -15,7 +18,8 @@ import retrofit2.HttpException
 import java.net.SocketTimeoutException
 
 class NewsRepository(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    private val newsDao: NewsDao
 ) : INewsRepository {
     override fun getAllNews(
         page: Int?,
@@ -103,5 +107,36 @@ class NewsRepository(
             }
         }
             .flowOn(Dispatchers.IO)
+
+    override fun getAllSavedNews(): Flow<Resource<List<NewsModel>>> =
+        flow<Resource<List<NewsModel>>> {
+            emit(Resource.Loading)
+            try {
+                newsDao.getAllNews().collect { news ->
+                    if (news.isEmpty()) {
+                        emit(Resource.Success(emptyList()))
+                    } else {
+                        val data = news.map { newsEntityToNewsModel(it) }
+                        emit(Resource.Success(data))
+                    }
+                }
+            } catch (e: Exception) {
+                emit(Resource.Error("Terjadi Kesalahan, coba lagi"))
+            }
+        }
+            .flowOn(Dispatchers.Default)
+
+    override suspend fun isSaved(url: String): Boolean = newsDao.isNewsExists(url)
+
+    override suspend fun insertNewsToDb(newsModel: NewsModel) {
+        val data = newModelToNewEntity(newsModel)
+        newsDao.insertNews(data)
+    }
+
+    override suspend fun deleteNewsFromDb(newsModel: NewsModel) {
+        val data = newModelToNewEntity(newsModel)
+        newsDao.deleteNews(data)
+    }
+
 
 }

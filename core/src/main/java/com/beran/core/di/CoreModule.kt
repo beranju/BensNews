@@ -1,6 +1,9 @@
 package com.beran.core.di
 
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import com.beran.core.BuildConfig
+import com.beran.core.data.local.room.NewDatabase
 import com.beran.core.data.remote.retrofit.ApiService
 import com.beran.core.data.repository.NewsRepository
 import com.beran.core.domain.repository.INewsRepository
@@ -9,10 +12,24 @@ import com.beran.core.utils.Constants.BASE_URL
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+
+val databaseModule = module {
+    factory { get<NewDatabase>().newDao() }
+    single {
+        Room.databaseBuilder(
+            androidContext(),
+            NewDatabase::class.java,
+            "bensDb"
+        )
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+}
 
 val networkModule = module {
     single {
@@ -44,5 +61,5 @@ val networkModule = module {
 }
 
 val repositoryModule = module {
-    single<INewsRepository> { NewsRepository(get()) }
+    single<INewsRepository> { NewsRepository(get(), get()) }
 }

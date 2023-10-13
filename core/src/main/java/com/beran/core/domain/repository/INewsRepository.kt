@@ -18,4 +18,9 @@ interface INewsRepository {
         query: String,
         searchIn: String? = null
     ): Flow<Resource<List<NewsModel>>>
+
+    fun getAllSavedNews(): Flow<Resource<List<NewsModel>>>
+    suspend fun isSaved(url: String): Boolean
+    suspend fun insertNewsToDb(newsModel: NewsModel)
+    suspend fun deleteNewsFromDb(newsModel: NewsModel)
 }

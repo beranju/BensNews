@@ -9,10 +9,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.outlined.Bookmark
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Bookmark
 import androidx.compose.material.icons.rounded.IosShare
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +24,7 @@ import com.beran.bensnews.ui.theme.BensNewsTheme
 
 @Composable
 fun DetailAppBar(
+    isSaved: Boolean,
     navigateBack: () -> Unit,
     onSave: () -> Unit,
     onShare: () -> Unit,
@@ -49,8 +52,9 @@ fun DetailAppBar(
         )
         Spacer(modifier = Modifier.width(24.dp))
         Icon(
-            imageVector = Icons.Rounded.Bookmark,
+            imageVector = if (isSaved) Icons.Filled.Bookmark else Icons.Outlined.Bookmark,
             contentDescription = null,
+            tint = if (isSaved) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
                 .size(24.dp)
                 .clickable {
@@ -65,6 +69,6 @@ fun DetailAppBar(
 @Composable
 fun DetailAppBarPrev() {
     BensNewsTheme {
-        DetailAppBar(navigateBack = {}, onShare = {}, onSave = {})
+        DetailAppBar(isSaved = true, navigateBack = {}, onShare = {}, onSave = {})
     }
 }

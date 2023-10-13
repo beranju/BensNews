@@ -15,9 +15,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,43 +42,65 @@ import com.beran.bensnews.ui.screen.detail.component.DetailAppBar
 import com.beran.bensnews.ui.theme.BensNewsTheme
 import com.beran.core.domain.model.NewsModel
 import com.beran.core.utils.DateUtils
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
+    detailViewModel: DetailViewModel,
     data: NewsModel,
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    LaunchedEffect(key1 = Unit, block = { detailViewModel.isNewsSaved(data.url) })
     val context = LocalContext.current
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-    ) {
-        DetailAppBar(
-            navigateBack = navigateBack,
-            onShare = {
-                val intent = Intent(Intent.ACTION_SEND).apply {
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_SUBJECT, data.title)
-                    putExtra(Intent.EXTRA_TEXT, "${data.title}. Read more here ${data.url}")
-                }
-                context.startActivity(Intent.createChooser(intent, "Bagikan berita mu"))
-            },
-            onSave = {
-
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val isSaved by detailViewModel.isSaved.collectAsState()
+    LaunchedEffect(key1 = isSaved, block = {
+        if (isSaved){
+            scope.launch {
+                snackbarHostState.showSnackbar("Berita disimpan")
             }
-        )
-        DetailContent(data = data, modifier = Modifier.weight(1f))
-        Box(modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp)) {
-            Button(
-                onClick = {
-                    val url = Uri.parse(data.url)
-                    val intent = Intent(Intent.ACTION_VIEW, url)
-                    context.startActivity(Intent.createChooser(intent, "Buka Browser"))
-                }, modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Text(text = "Baca Selengkapnya")
+        }
+    })
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        }
+    ) {paddingValues ->
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            DetailAppBar(
+                isSaved = isSaved,
+                navigateBack = navigateBack,
+                onShare = {
+                    val intent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_SUBJECT, data.title)
+                        putExtra(Intent.EXTRA_TEXT, "${data.title}. Read more here ${data.url}")
+                    }
+                    context.startActivity(Intent.createChooser(intent, "Bagikan berita mu"))
+                },
+                onSave = {
+                    detailViewModel.setSaveNews(data)
+                }
+            )
+            DetailContent(data = data, modifier = Modifier.weight(1f))
+            Box(modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp)) {
+                Button(
+                    onClick = {
+                        val url = Uri.parse(data.url)
+                        val intent = Intent(Intent.ACTION_VIEW, url)
+                        context.startActivity(Intent.createChooser(intent, "Buka Browser"))
+                    }, modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Text(text = "Baca Selengkapnya")
+                }
             }
         }
     }

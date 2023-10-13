@@ -21,7 +21,7 @@ class NewsPagingSource(private val apiService: ApiService) : PagingSource<Int, N
             val position = params.key ?: INITIAL_PAGE_INDEX
             val result = apiService.fetchAllNews(page = position, pageSize = params.loadSize)
             val articlesItem: List<ArticlesItem> =
-                result.body()?.articles?.filterNotNull() ?: emptyList<ArticlesItem>()
+                result.body()?.articles?.filterNotNull() ?: emptyList()
             val data = articlesItem.map { DataMapper.articleItemToNewsModel(it) }
 
             LoadResult.Page(

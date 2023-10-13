@@ -89,6 +89,7 @@ fun DetailScreen(
                     detailViewModel.setSaveNews(data)
                     scope.launch {
                         val state = if (isSaved) "deleted" else "added"
+                        snackbarHostState.currentSnackbarData?.dismiss()
                         snackbarHostState.showSnackbar(
                             context.getString(
                                 R.string.snackbar_message,

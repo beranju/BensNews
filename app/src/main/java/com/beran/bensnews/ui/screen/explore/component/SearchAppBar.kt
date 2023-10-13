@@ -25,7 +25,7 @@ import com.beran.bensnews.R
 import com.beran.bensnews.ui.theme.BensNewsTheme
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchAppBar(
     searchText: String,

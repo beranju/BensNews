@@ -83,7 +83,7 @@ class NewsRepository(
         query: String,
         sortBy: String?
     ): Flow<Resource<List<NewsModel>>> =
-        flow<Resource<List<NewsModel>>> {
+        flow {
             emit(Resource.Loading)
             try {
                 val response = apiService.findNewsByQuery(query = query, sortBy = sortBy)

@@ -1,7 +1,6 @@
 package com.beran.core.data.utils
 
 import com.beran.core.data.remote.response.ArticlesItem
-import com.beran.core.domain.model.NewsModel
 
 object DataDummy {
     fun generateListOfArticleItems(): List<ArticlesItem>{

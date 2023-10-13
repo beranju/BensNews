@@ -74,7 +74,7 @@ fun SavedContent(
                     }
                 } else {
                     if (news.isEmpty()) {
-                        item() {
+                        item {
                             EmptyView(
                                 message = "Your saved news is empty",
                                 modifier = Modifier.weight(1f)

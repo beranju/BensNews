@@ -1,7 +1,6 @@
 package com.beran.core.utils
 
 import java.text.SimpleDateFormat
-import java.time.Instant
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -14,7 +13,7 @@ object DateUtils {
 
         try {
             val parsedTime: Date = dateFormat.parse(timeStamp)
-            val currentDate: Date = Date()
+            val currentDate = Date()
             val timeDifferenceMillis: Long = currentDate.time - parsedTime.time
             // ** calculate
             val seconds = timeDifferenceMillis / 1000

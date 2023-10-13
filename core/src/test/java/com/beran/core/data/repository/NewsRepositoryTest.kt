@@ -1,15 +1,13 @@
 package com.beran.core.data.repository
 
+import com.beran.core.data.local.room.NewsDao
 import com.beran.core.data.remote.response.NewsApiResponse
 import com.beran.core.data.remote.retrofit.ApiService
 import com.beran.core.data.utils.DataDummy
 import com.beran.core.domain.common.Resource
 import com.beran.core.domain.model.NewsModel
 import com.beran.core.domain.repository.INewsRepository
-import com.beran.core.utils.DataMapper
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -23,11 +21,13 @@ class NewsRepositoryTest {
 
     @Mock
     private lateinit var apiService: ApiService
+    @Mock
+    private lateinit var newsDao: NewsDao
 
     @Before
     fun setup() {
         MockitoAnnotations.openMocks(this)
-        newsRepository = NewsRepository(apiService)
+        newsRepository = NewsRepository(apiService, newsDao)
     }
 
     @Test

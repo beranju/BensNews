@@ -2,6 +2,7 @@ package com.beran.bensnews.ui.screen.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,6 +36,7 @@ import com.beran.bensnews.ui.screen.home.component.HomeAppBar
 import com.beran.bensnews.ui.screen.home.component.TopNewsSection
 import com.beran.core.domain.model.NewsModel
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
@@ -39,15 +45,28 @@ fun HomeScreen(
 ) {
     val state = viewModel.state
     val pagingNews = viewModel.getPagingNews().collectAsLazyPagingItems()
-    HomeContent(
-        isLoading = state.loading,
-        error = state.error,
-        headLineNews = state.headline,
-        pagingNews = pagingNews,
-        navigateToDetail = navigateToDetail,
-        navigateToExplore = navigateToExplore,
-        modifier = modifier
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = state.isRefresh,
+        onRefresh = viewModel::refresh
     )
+
+    Box {
+        HomeContent(
+            isLoading = state.loading,
+            error = state.error,
+            headLineNews = state.headline,
+            pagingNews = pagingNews,
+            navigateToDetail = navigateToDetail,
+            navigateToExplore = navigateToExplore,
+            modifier = modifier
+                .pullRefresh(pullRefreshState)
+        )
+        PullRefreshIndicator(
+            refreshing = state.isRefresh,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter),
+        )
+    }
 
 }
 

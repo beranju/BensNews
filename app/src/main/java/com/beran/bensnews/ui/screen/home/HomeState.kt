@@ -5,6 +5,7 @@ import com.beran.core.domain.model.NewsModel
 
 data class HomeState(
     val loading: Boolean = false,
+    val isRefresh: Boolean = false,
     val headline: NewsModel? = null,
     val pagingNews: PagingData<NewsModel> = PagingData.empty(),
     val error: String? = null

@@ -22,7 +22,7 @@ class HomeViewModel(private val newsUseCase: NewsUseCase) : ViewModel() {
 
     fun getPagingNews() = newsUseCase.getPagingNews().cachedIn(viewModelScope)
 
-    private fun fetchAllNews() {
+    private fun fetchAllNews(isRefresh: Boolean = false) {
         viewModelScope.launch {
             newsUseCase.getAllNews(pageSize = 10).collect { result ->
                 when (result) {
@@ -34,6 +34,7 @@ class HomeViewModel(private val newsUseCase: NewsUseCase) : ViewModel() {
                             loading = false,
                             error = null,
                             headline = headlineNews,
+                            isRefresh = false
                         )
                     }
 
@@ -41,16 +42,22 @@ class HomeViewModel(private val newsUseCase: NewsUseCase) : ViewModel() {
                         loading = false,
                         error = result.message,
                         headline = null,
+                        isRefresh = false
                     )
 
                     is Resource.Loading -> state = state.copy(
                         loading = true,
                         error = null,
                         headline = null,
+                        isRefresh = isRefresh
                     )
                 }
             }
         }
+    }
+
+    fun refresh() {
+        fetchAllNews(isRefresh = true)
     }
 
     override fun onCleared() {

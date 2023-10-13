@@ -47,7 +47,7 @@ android {
 
 dependencies {
     implementation("androidx.appcompat:appcompat:$appcompat_version")
-    implementation("com.google.android.material:material:$material_version")
+    implementation("com.google.android.material:material:$material_3_version")
 
     implementation("androidx.room:room-runtime:$room_version")
     ksp("androidx.room:room-compiler:$room_version")

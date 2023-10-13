@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.outlined.Bookmark
+import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.IosShare
 import androidx.compose.material3.Icon
@@ -40,23 +40,23 @@ fun DetailAppBar(
         Icon(
             imageVector = Icons.Rounded.ArrowBack, contentDescription = null,
             modifier = Modifier
-                .size(24.dp)
+                .size(26.dp)
                 .clickable { navigateBack() }
         )
         Spacer(modifier = Modifier.weight(1f))
         Icon(
             imageVector = Icons.Rounded.IosShare, contentDescription = null,
             modifier = Modifier
-                .size(24.dp)
+                .size(26.dp)
                 .clickable { onShare() }
         )
         Spacer(modifier = Modifier.width(24.dp))
         Icon(
-            imageVector = if (isSaved) Icons.Filled.Bookmark else Icons.Outlined.Bookmark,
+            imageVector = if (isSaved) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
             contentDescription = null,
             tint = if (isSaved) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
-                .size(24.dp)
+                .size(26.dp)
                 .clickable {
                     onSave()
                 }

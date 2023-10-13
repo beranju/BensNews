@@ -6,4 +6,11 @@
     <string name="notification_icon">Notification Icon</string>
     <string name="headline">Headline</string>
     <string name="search_hint">Search on Headlines</string>
+
+<!--    DETAIL STRING-->
+    <string name="share_your_news">Share your news</string>
+    <string name="share_extra_text">%s . Read more here %s</string>
+    <string name="snackbar_message">news %s successfully</string>
+    <string name="read_more">Read More</string>
+    <string name="select_browser">Select Browser</string>
 </resources>

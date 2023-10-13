@@ -33,13 +33,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.beran.bensnews.R
 import com.beran.bensnews.ui.screen.detail.component.DetailAppBar
-import com.beran.bensnews.ui.theme.BensNewsTheme
 import com.beran.core.domain.model.NewsModel
 import com.beran.core.utils.DateUtils
 import kotlinx.coroutines.launch
@@ -57,18 +56,11 @@ fun DetailScreen(
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val isSaved by detailViewModel.isSaved.collectAsState()
-    LaunchedEffect(key1 = isSaved, block = {
-        if (isSaved){
-            scope.launch {
-                snackbarHostState.showSnackbar("Berita disimpan")
-            }
-        }
-    })
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         }
-    ) {paddingValues ->
+    ) { paddingValues ->
         Column(
             modifier = modifier
                 .fillMaxSize()
@@ -81,12 +73,29 @@ fun DetailScreen(
                     val intent = Intent(Intent.ACTION_SEND).apply {
                         type = "text/plain"
                         putExtra(Intent.EXTRA_SUBJECT, data.title)
-                        putExtra(Intent.EXTRA_TEXT, "${data.title}. Read more here ${data.url}")
+                        putExtra(
+                            Intent.EXTRA_TEXT,
+                            context.getString(R.string.share_extra_text, data.title, data.url)
+                        )
                     }
-                    context.startActivity(Intent.createChooser(intent, "Bagikan berita mu"))
+                    context.startActivity(
+                        Intent.createChooser(
+                            intent,
+                            context.getString(R.string.share_your_news)
+                        )
+                    )
                 },
                 onSave = {
                     detailViewModel.setSaveNews(data)
+                    scope.launch {
+                        val state = if (isSaved) "deleted" else "added"
+                        snackbarHostState.showSnackbar(
+                            context.getString(
+                                R.string.snackbar_message,
+                                state
+                            )
+                        )
+                    }
                 }
             )
             DetailContent(data = data, modifier = Modifier.weight(1f))
@@ -95,11 +104,16 @@ fun DetailScreen(
                     onClick = {
                         val url = Uri.parse(data.url)
                         val intent = Intent(Intent.ACTION_VIEW, url)
-                        context.startActivity(Intent.createChooser(intent, "Buka Browser"))
+                        context.startActivity(
+                            Intent.createChooser(
+                                intent,
+                                context.getString(R.string.select_browser)
+                            )
+                        )
                     }, modifier = Modifier
                         .fillMaxWidth()
                 ) {
-                    Text(text = "Baca Selengkapnya")
+                    Text(text = stringResource(R.string.read_more))
                 }
             }
         }
@@ -149,22 +163,6 @@ fun DetailContent(
             maxLines = 4,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.bodyLarge
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun DetailContentPrev() {
-    BensNewsTheme {
-        DetailContent(
-            data = NewsModel(
-                url = "",
-                publishedAt = "1 hour ago",
-                urlToImage = null,
-                title = "Example of news title should like this style, this title will be remove next tine",
-                author = "beranju",
-            )
         )
     }
 }
